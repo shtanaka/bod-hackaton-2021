@@ -1,7 +1,13 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
-import { getFirestore, collection, setDoc, doc } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  addDoc,
+} from 'firebase/firestore';
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -24,9 +30,17 @@ export const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
 
-export const collections = {
+export const references = {
   users: collection(firestore, 'users'),
-  tasks: collection(firestore, 'tasks'),
+  user: (userId) => doc(references.users, userId || 'null'),
+  challenges: collection(firestore, 'challenge'),
+  challenge: (challengeId) => doc(references.challenges, challengeId || 'null'),
+  challengeLikes: (challengeId) =>
+    collection(firestore, `challenge/${challengeId}/likes`),
+  shots: (challengeId) =>
+    collection(firestore, `challenge/${challengeId}/shots`),
+  shotLikes: (challengeId, shotId) =>
+    collection(firestore, `challenge/${challengeId}/shots/${shotId}/likes`),
 };
 
 export async function createUser(email, password, displayName) {
@@ -34,7 +48,7 @@ export async function createUser(email, password, displayName) {
   await createUserWithEmailAndPassword(auth, email, password);
 
   // create user profile
-  const userProfileRef = doc(collections.users, auth.currentUser.uid);
+  const userProfileRef = doc(references.users, auth.currentUser.uid);
   await setDoc(userProfileRef, {
     displayName,
     photoURL: `https://i.pravatar.cc/150?u=${auth.currentUser.uid}`,
@@ -50,4 +64,35 @@ export async function signInUser(email, password) {
 
 export async function signOutUser() {
   await signOut(auth);
+}
+
+export async function createChallenge({ title, mediaURL, challenger }) {
+  const data = {
+    title,
+    mediaURL,
+    createdAt: new Date().toISOString(),
+    ended: false,
+    challenger: {
+      userId: challenger?.userId || 'N/A',
+      displayName: challenger?.displayName || 'N/A',
+      photoURL: challenger?.photoURL || 'N/A',
+    },
+  };
+
+  await addDoc(references.challenges, data);
+}
+
+export async function createShot(challengeId, { title, mediaURL, contender }) {
+  const data = {
+    title,
+    mediaURL,
+    createdAt: new Date().toISOString(),
+    contender: {
+      userId: contender?.userId || 'N/A',
+      displayName: contender?.displayName || 'N/A',
+      photoURL: contender?.photoURL || 'N/A',
+    },
+  };
+
+  await addDoc(references.shots(challengeId), data);
 }
