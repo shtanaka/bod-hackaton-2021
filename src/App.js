@@ -5,11 +5,8 @@ import { connect } from "react-redux";
 
 import { Home } from './screens/Home';
 import { About } from './screens/About';
+import { DataStructure } from './screens/DataStructure';
 import { ChallengeUpload } from './screens/ChallengeUpload';
-
-import { AppHeader } from './components/AppHeader';
-
-import './App.css';
 
 const queryClient = new QueryClient();
 
@@ -24,6 +21,7 @@ function App({ header }) {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="about" element={<About />} />
+            <Route path="data-structure" element={<DataStructure />} />
           </Routes>
         </Container>
         <Routes>
