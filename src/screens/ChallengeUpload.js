@@ -34,7 +34,7 @@ function ChallengeUpload({ header }) {
   }
 
   function goBackToChallenge() {
-    console.log('GO BACK TO CHALLENGE');
+    navigate(-1);
   }
 
   return (

@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { useState } from 'react';
 
+import { Link, useNavigate } from 'react-router-dom';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import CancelIcon from '@mui/icons-material/Cancel';
+
 import {
   useCollection,
   useDocument,
@@ -36,6 +41,7 @@ const style = {
 };
 
 export function VideoPage() {
+  const navigate = useNavigate();
   const { challengeId } = useParams();
   const [challenge] = useDocument(references.challenge(challengeId));
   const [shots] = useCollection(references.shots(challengeId));
@@ -127,6 +133,18 @@ export function VideoPage() {
           </Modal>
         </div>
       )}
+      <Box position="fixed" top="1em" right="1em">
+        <Link to={`/shot-upload/${challengeId}`}>
+          <Fab color="primary" aria-label="add">
+            <AddIcon />
+          </Fab>
+        </Link>
+      </Box>
+      <Box position="fixed" top="1em" left="1em">
+        <Fab onClick={() => navigate(-1)} color="secondary" aria-label="add">
+          <CancelIcon />
+        </Fab>
+      </Box>
     </>
   );
 }

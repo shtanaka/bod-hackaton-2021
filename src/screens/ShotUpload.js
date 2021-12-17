@@ -3,13 +3,13 @@ import { connect } from "react-redux";
 import VideoRecorder from "react-video-recorder";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { useParams } from "react-router-dom";
-
+import { useParams, useNavigate, useRoutes } from "react-router-dom";
 
 import { createShot, auth, references } from "../services/firebase";
 import CameraActions from '../components/CameraActions';
 
 function ShotUpload({ header }) {
+  const navigate = useNavigate();
   const { challengeId } = useParams();
   const [user] = useAuthState(auth);
   const [userProfile] = useDocumentData(references.user(user?.uid));
@@ -31,11 +31,11 @@ function ShotUpload({ header }) {
       },
     }, videoBlob);
 
-    console.log(response);
+    navigate(`/challenge/${challengeId}`, { replace: true });
   }
 
   function goBackToChallenge() {
-    console.log('GO BACK TO CHALLENGE');
+    navigate(-1);
   }
 
   return (
