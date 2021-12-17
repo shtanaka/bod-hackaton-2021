@@ -13,12 +13,7 @@ import {
   createShot,
 } from '../services/firebase';
 
-import { useParams } from "react-router-dom";
-
-import testBackground from '../cat.jpeg'
-import testVideo from '../file_example_WEBM_480_900KB.webm'
-
-import { styled } from '@mui/material/styles';
+import { useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 
@@ -37,56 +32,54 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  borderRadius: '10px'
+  borderRadius: '10px',
 };
-
-const placeHolderData = [
-  { a: 'a' },
-  { a: 'b' },
-  { a: 'c' },
-  { a: 'a' },
-  { a: 'b' },
-  { a: 'c' },
-  { a: 'a' },
-  { a: 'b' },
-  { a: 'c' },
-  { a: 'a' },
-  { a: 'b' },
-  { a: 'c' },
-]
 
 export function VideoPage() {
   const { challengeId } = useParams();
   const [challenge] = useDocument(references.challenge(challengeId));
+  const [shots] = useCollection(references.shots(challengeId));
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const thumbNail = (item) => {
+  const thumbNail = (shot) => {
     return (
       <>
-
-        <Button onClick={() => console.log('click')} style={{ color: 'white', marginLeft: '5px', transform: 'translate(0%, 90%)', fontSize: '20px', zIndex: '100' }}>Video Title</Button>
+        <Button
+          onClick={() => console.log('click')}
+          style={{
+            color: 'white',
+            marginLeft: '5px',
+            transform: 'translate(0%, 90%)',
+            fontSize: '20px',
+            zIndex: '100',
+          }}
+        >
+          {shot.title}
+        </Button>
         <video
           style={{
             width: '100%',
             height: '150px',
             objectFit: 'cover',
           }}
-          className='videoTag' controls>
-          <source src={testVideo} type='video/mp4' />
-        </video>
+          src={shot.mediaURL}
+          className="videoTag"
+          controls
+        ></video>
       </>
-    )
-  }
+    );
+  };
 
   const returnGrid = (arrayOfVideos) => {
     return (
       <>
-        {arrayOfVideos.map((item, index) => (
-          thumbNail(item)
-        ))}
+        {arrayOfVideos?.docs.map((shotDoc) => {
+          const shot = shotDoc.data();
+          return thumbNail(shot);
+        })}
       </>
     );
   };
@@ -94,7 +87,6 @@ export function VideoPage() {
   return (
     <>
       {challenge && (
-
         <div style={{ height: '100%', width: '100%' }}>
           <video
             style={{
@@ -104,17 +96,19 @@ export function VideoPage() {
               objectFit: 'cover',
               top: '50%',
               left: '50%',
-              transform: 'translate(-50%, -50%)'
+              transform: 'translate(-50%, -50%)',
             }}
-            className='videoTag' controls>
-            <source src={challenge.data().mediaURL} type='video/mp4' />
+            className="videoTag"
+            controls
+          >
+            <source src={challenge.data().mediaURL} type="video/mp4" />
           </video>
           <Button
             style={{ position: 'fixed', bottom: '30px', right: '40%' }}
-            variant="outlined"
-            href="#outlined-buttons"
-            onClick={() => handleOpen()}>
-            Do Stuff
+            variant="contained"
+            onClick={() => handleOpen()}
+          >
+            Shots
           </Button>
           <Modal
             open={open}
@@ -124,13 +118,10 @@ export function VideoPage() {
           >
             <Box sx={style}>
               <Typography id="modal-modal-title" variant="h6" component="h2">
-                test test test
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                test test test
+                Shots
               </Typography>
               <Paper style={{ maxHeight: '80%', overflow: 'auto' }}>
-                {returnGrid(placeHolderData)}
+                {returnGrid(shots)}
               </Paper>
             </Box>
           </Modal>

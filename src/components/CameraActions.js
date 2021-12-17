@@ -1,10 +1,10 @@
-import React from 'react'
-import styled from 'styled-components'
-import Button from '@mui/material/Button'
-import RecordButton from './RecordButton'
-import StopButton from './StopButton'
-import Timer from './Timer'
-import Countdown from './Countdown'
+import React from 'react';
+import styled from 'styled-components';
+import Button from '@mui/material/Button';
+import RecordButton from './RecordButton';
+import StopButton from './StopButton';
+import Timer from './Timer';
+import Countdown from './Countdown';
 
 const ActionsWrapper = styled.div`
   position: absolute;
@@ -14,7 +14,7 @@ const ActionsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const CameraActions = ({
   isVideoInputSupported,
@@ -43,15 +43,16 @@ const CameraActions = ({
   onUploadVideo,
   onCancelClick,
 }) => {
-  React.useEffect(() => {
-    // turns camera on everytime is not replaying video
-    if (!isReplayingVideo && !isCameraOn) {
-      onTurnOnCamera();
-    }
-  }, [isCameraOn, isReplayingVideo])
+  // React.useEffect(() => {
+  //   // turns camera on everytime is not replaying video
+  //   if (!isReplayingVideo && !isCameraOn) {
+  //     onTurnOnCamera();
+  //   }
+  // }, [isCameraOn, isReplayingVideo])
 
   const renderContent = () => {
-    const shouldUseVideoInput = !isInlineRecordingSupported && isVideoInputSupported;
+    const shouldUseVideoInput =
+      !isInlineRecordingSupported && isVideoInputSupported;
 
     if (
       (!isInlineRecordingSupported && !isVideoInputSupported) ||
@@ -59,14 +60,14 @@ const CameraActions = ({
       isConnecting ||
       isRunningCountdown
     ) {
-      return null
+      return null;
     }
 
     if (isReplayingVideo) {
       return (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <Button
-            type='button'
+            type="button"
             variant="contained"
             onClick={onUploadVideo}
             style={{ marginBottom: '8px' }}
@@ -74,60 +75,60 @@ const CameraActions = ({
             {'upload video'}
           </Button>
           <Button
-            type='button'
+            type="button"
             variant="contained"
             color="secondary"
             onClick={onStopReplaying}
-            data-qa='start-replaying'
+            data-qa="start-replaying"
           >
             {'Use another video'}
           </Button>
         </div>
-      )
+      );
     }
 
     if (isRecording) {
       return (
         <StopButton
-          type='button'
+          type="button"
           onClick={onStopRecording}
-          data-qa='stop-recording'
+          data-qa="stop-recording"
         />
-      )
+      );
     }
 
     if (isCameraOn && streamIsReady) {
       return (
         <RecordButton
-          type='button'
+          type="button"
           onClick={onStartRecording}
-          data-qa='start-recording'
+          data-qa="start-recording"
         />
-      )
+      );
     }
 
     if (useVideoInput) {
       return (
-        <Button type='button' onClick={onOpenVideoInput} data-qa='open-input'>
+        <Button type="button" onClick={onOpenVideoInput} data-qa="open-input">
           {'Upload a video'}
         </Button>
-      )
+      );
     }
 
     return shouldUseVideoInput ? (
-      <Button type='button' onClick={onOpenVideoInput} data-qa='open-input'>
+      <Button type="button" onClick={onOpenVideoInput} data-qa="open-input">
         {'Record a video'}
       </Button>
     ) : (
-      <Button type='button' onClick={onTurnOnCamera} data-qa='turn-on-camera'>
+      <Button type="button" onClick={onTurnOnCamera} data-qa="turn-on-camera">
         {'Turn my camera ON'}
       </Button>
-    )
-  }
+    );
+  };
 
   return (
     <div>
-      <Button 
+      <Button
         variant="contained"
         color="error"
         style={{ position: 'fixed', top: '8px', right: '8px' }}
@@ -139,7 +140,7 @@ const CameraActions = ({
       {isRunningCountdown && <Countdown countdownTime={countdownTime} />}
       <ActionsWrapper>{renderContent()}</ActionsWrapper>
     </div>
-  )
-}
+  );
+};
 
 export default CameraActions;
