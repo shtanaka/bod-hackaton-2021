@@ -17,11 +17,15 @@ function ChallengeUpload({ header }) {
     console.log('Upload video: ', videoBlob);
   }
 
+  function goBackToChallenge() {
+    console.log('GO BACK TO CHALLENGE');
+  }
+
   return (
     <div style={{ position: 'fixed', height: "100%", width: "100%" }}>
       <VideoRecorder
         onRecordingComplete={videoBlob => setVideoBlob(videoBlob)}
-        renderActions={(props) => <CameraActions onUploadVideo={uploadVideo} {...props} />}
+        renderActions={(props) => <CameraActions onUploadVideo={uploadVideo} onCancelClick={goBackToChallenge} {...props} />}
       />
     </div>
   );

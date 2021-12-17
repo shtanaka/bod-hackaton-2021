@@ -40,9 +40,9 @@ const CameraActions = ({
   onResumeRecording,
   onStopReplaying,
   onConfirm,
-  onUploadVideo
+  onUploadVideo,
+  onCancelClick,
 }) => {
-  
   React.useEffect(() => {
     // turns camera on everytime is not replaying video
     if (!isReplayingVideo && !isCameraOn) {
@@ -127,6 +127,14 @@ const CameraActions = ({
 
   return (
     <div>
+      <Button 
+        variant="contained"
+        color="error"
+        style={{ position: 'fixed', top: '8px', right: '8px' }}
+        onClick={onCancelClick}
+      >
+        Cancel
+      </Button>
       {isRecording && <Timer timeLimit={timeLimit} />}
       {isRunningCountdown && <Countdown countdownTime={countdownTime} />}
       <ActionsWrapper>{renderContent()}</ActionsWrapper>
