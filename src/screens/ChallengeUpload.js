@@ -6,8 +6,10 @@ import { useDocumentData } from 'react-firebase-hooks/firestore';
 
 import { createChallenge, auth, references } from "../services/firebase";
 import CameraActions from '../components/CameraActions';
+import { useNavigate } from "react-router";
 
 function ChallengeUpload({ header }) {
+  const navigate = useNavigate();
   const [user] = useAuthState(auth);
   const [userProfile] = useDocumentData(references.user(user?.uid));
   const [videoBlob, setVideoBlob] = useState(null);
@@ -27,8 +29,8 @@ function ChallengeUpload({ header }) {
         photoURL: userProfile?.photoURL,
       },
     }, videoBlob);
-
-    console.log(response);
+    
+    navigate(`/challenge/${response.id}`, { replace: true });
   }
 
   function goBackToChallenge() {
