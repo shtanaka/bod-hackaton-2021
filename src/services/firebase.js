@@ -15,6 +15,8 @@ import {
   signOut,
 } from 'firebase/auth';
 
+import { getStorage, uploadBytes, getDownloadURL, ref } from "firebase/storage";
+
 const firebaseConfig = {
   apiKey: 'AIzaSyBYvpaSxyI_yZtRjfBBD_HMhxmicFq3UeA',
   authDomain: 'bbhackaton2021.firebaseapp.com',
@@ -66,7 +68,19 @@ export async function signOutUser() {
   await signOut(auth);
 }
 
-export async function createChallenge({ title, mediaURL, challenger }) {
+export async function uploadFile(blob, filename) {
+  console.log({ blob, filename })
+  const storage = getStorage();
+  const videoReference = ref(storage, filename);
+
+  const snapshot = await uploadBytes(videoReference, blob);
+  return [videoReference, snapshot];
+}
+
+export async function createChallenge({ title, challenger }, blob) {
+  const [videoReference] = await uploadFile(blob, `${challenger?.userId}-${new Date().getTime()}.webm`);
+  const mediaURL = await getDownloadURL(videoReference);
+
   const data = {
     title,
     mediaURL,
@@ -79,10 +93,13 @@ export async function createChallenge({ title, mediaURL, challenger }) {
     },
   };
 
-  await addDoc(references.challenges, data);
+  return await addDoc(references.challenges, data);
 }
 
-export async function createShot(challengeId, { title, mediaURL, contender }) {
+export async function createShot(challengeId, { title, contender }, blob) {
+  const [videoReference] = await uploadFile(blob, `${contender?.userId}-${challengeId}-${new Date().getTime()}.webm`);
+  const mediaURL = await getDownloadURL(videoReference);
+
   const data = {
     title,
     mediaURL,
@@ -94,5 +111,12 @@ export async function createShot(challengeId, { title, mediaURL, contender }) {
     },
   };
 
-  await addDoc(references.shots(challengeId), data);
+  return await addDoc(references.shots(challengeId), data);
+}
+
+export async function likeChallenge(challengeId) {
+  const likeRef = doc(references.challengeLikes(challengeId), auth.currentUser.uid);
+  await setDoc(likeRef, true);
+
+  return null;
 }

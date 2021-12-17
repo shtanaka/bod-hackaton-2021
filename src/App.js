@@ -7,6 +7,8 @@ import { Home } from './screens/Home';
 import { About } from './screens/About';
 import { DataStructure } from './screens/DataStructure';
 import { ChallengeUpload } from './screens/ChallengeUpload';
+import { ShotUpload } from './screens/ShotUpload';
+import { AppHeader } from './components/AppHeader';
 
 const queryClient = new QueryClient();
 
@@ -26,6 +28,7 @@ function App({ header }) {
         </Container>
         <Routes>
           <Route path="challenge-upload" element={<ChallengeUpload />} />
+          <Route path="shot-upload/:challengeId" element={<ShotUpload />} />
         </Routes>
       </div>
     </QueryClientProvider>

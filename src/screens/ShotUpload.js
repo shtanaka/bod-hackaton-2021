@@ -3,11 +3,14 @@ import { connect } from "react-redux";
 import VideoRecorder from "react-video-recorder";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useParams } from "react-router-dom";
 
-import { createChallenge, auth, references } from "../services/firebase";
+
+import { createShot, auth, references } from "../services/firebase";
 import CameraActions from '../components/CameraActions';
 
-function ChallengeUpload({ header }) {
+function ShotUpload({ header }) {
+  const { challengeId } = useParams();
   const [user] = useAuthState(auth);
   const [userProfile] = useDocumentData(references.user(user?.uid));
   const [videoBlob, setVideoBlob] = useState(null);
@@ -19,9 +22,9 @@ function ChallengeUpload({ header }) {
   }, []);
 
   async function uploadVideo() {
-    const response = await createChallenge({
+    const response = await createShot(challengeId, {
       title: 'Test first upload',
-      challenger: {
+      contender: {
         userId: user?.uid,
         displayName: userProfile?.displayName,
         photoURL: userProfile?.photoURL,
@@ -50,6 +53,6 @@ const mapState = () => ({});
 
 const mapDispatch = ({ header }) => ({ header });
 
-const ConnectedChallengeUpload = connect(mapState, mapDispatch)(ChallengeUpload);
+const ConnectedShotUpload = connect(mapState, mapDispatch)(ShotUpload);
 
-export { ConnectedChallengeUpload as ChallengeUpload };
+export { ConnectedShotUpload as ShotUpload };
