@@ -71,7 +71,7 @@ export function AppHeader() {
           <Button
             variant="outlined"
             disabled={!email || !password}
-            onClick={() => signIn.mutate(email, password)}
+            onClick={() => signUp.mutate(email, password)}
           >
             Login
           </Button>
