@@ -24,9 +24,11 @@ function App({ header }) {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="about" element={<About />} />
-            <Route path="challenge-upload" element={<ChallengeUpload />} />
           </Routes>
         </Container>
+        <Routes>
+          <Route path="challenge-upload" element={<ChallengeUpload />} />
+        </Routes>
       </div>
     </QueryClientProvider>
   );
@@ -34,6 +36,6 @@ function App({ header }) {
 
 const mapState = ({ header }) => ({ header });
 
-const mapDispatch = () => ({ });
+const mapDispatch = () => ({});
 
 export default connect(mapState, mapDispatch)(App);
