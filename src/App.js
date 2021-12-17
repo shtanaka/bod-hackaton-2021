@@ -2,8 +2,8 @@ import { Routes, Route } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import { Home } from './screens/Home';
 import { About } from './screens/About';
+import { DataStructure } from './screens/DataStructure';
 import { AppHeader } from './components/AppHeader';
-import './App.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 const queryClient = new QueryClient();
@@ -17,6 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="about" element={<About />} />
+            <Route path="data-structure" element={<DataStructure />} />
           </Routes>
         </Container>
       </div>
