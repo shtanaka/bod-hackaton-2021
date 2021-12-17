@@ -105,7 +105,8 @@ export function VideoPage() {
               transform: 'translate(-50%, -50%)',
             }}
             className="videoTag"
-            controls
+            autoPlay
+            loop
           >
             <source src={challenge.data().mediaURL} type="video/mp4" />
           </video>

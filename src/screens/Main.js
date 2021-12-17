@@ -55,13 +55,13 @@ export function Main() {
           {data.challenger.displayName}
         </Button>
         <video
+          onClick={() => goToChallengePage(challenge.id)}
           style={{
             width: '100%',
             height: '150px',
             objectFit: 'cover',
           }}
           className="videoTag"
-          controls
         >
           <source src={challenge.data().mediaURL} type="video/mp4" />
         </video>
