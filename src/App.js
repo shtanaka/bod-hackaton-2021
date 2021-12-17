@@ -8,6 +8,7 @@ import { About } from './screens/About';
 import { DataStructure } from './screens/DataStructure';
 import { ChallengeUpload } from './screens/ChallengeUpload';
 import { ShotUpload } from './screens/ShotUpload';
+import { VideoPage } from './screens/VideoPage';
 import { AppHeader } from './components/AppHeader';
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ function App({ header }) {
             <Route path="/" element={<Main />} />
             <Route path="about" element={<About />} />
             <Route path="data-structure" element={<DataStructure />} />
+            <Route path="challenge/:challengeId" element={<VideoPage />} />
           </Routes>
         </Container>
         <Routes>
