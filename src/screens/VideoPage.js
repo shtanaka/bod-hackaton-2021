@@ -17,6 +17,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
+  height:'80%',
   width: '80%',
   bgcolor: 'background.paper',
   border: '2px solid #000',
@@ -25,11 +26,54 @@ const style = {
   borderRadius:'10px'
 };
 
+const placeHolderData = [
+    {a:'a'},
+    {a:'b'},
+    {a:'c'},
+    {a:'a'},
+    {a:'b'},
+    {a:'c'},
+    {a:'a'},
+    {a:'b'},
+    {a:'c'},
+    {a:'a'},
+    {a:'b'},
+    {a:'c'},
+]
+
 export function VideoPage() {
   
   const [open, setOpen] = useState(true);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const thumbNail = (item) => {
+    return(
+    <>
+     
+     <Button onClick={() => console.log('click')} style={{ color:'white',marginLeft:'5px',transform: 'translate(0%, 90%)',fontSize:'20px',zIndex:'100'}}>Video Title</Button>
+      <video 
+          style={{
+              width:'100%', 
+              height:'150px',
+              objectFit:'cover',
+          }} 
+          className='videoTag' controls>
+          <source src={testVideo} type='video/mp4' />
+      </video>
+    </>
+    )
+}
+
+const returnGrid = (arrayOfVideos) => {
+    return (
+      <>
+        {arrayOfVideos.map((item, index) => (
+          thumbNail(item)
+        ))}
+      </>
+    );
+  };
 
   return (
     <>
@@ -67,6 +111,9 @@ export function VideoPage() {
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                         test test test
                     </Typography>
+                    <Paper style={{maxHeight: '80%', overflow: 'auto'}}>
+                        {returnGrid(placeHolderData)}
+                    </Paper>
                 </Box>
             </Modal>
        </div>

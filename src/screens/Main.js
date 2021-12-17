@@ -4,6 +4,8 @@ import testBackground from '../cat.jpeg'
 
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
+import testVideo from '../file_example_WEBM_480_900KB.webm'
+import Button from '@mui/material/Button';
 
 const placeHolderData = [
     {a:'a'},
@@ -26,22 +28,34 @@ export function Main() {
 
   const thumbNail = () => {
       return(
-        <div style={{height:'150px',backgroundSize:'100% 100%', backgroundRepeat:'no-repeat', backgroundImage: `url(${testBackground})`}}/>
+        <>
+            <Button onClick={() => console.log('click')} style={{position:'absolute', color:'white',marginLeft:'5px',fontSize:'12px',zIndex:'100'}}>Video Title</Button>
+            <Button onClick={() => console.log('click')} style={{position:'absolute', color:'white',marginLeft:'5px',transform: 'translate(0%, 90%)',fontSize:'12px',zIndex:'100'}}>Username</Button>
+            <video 
+                style={{
+                    width:'100%', 
+                    height:'150px',
+                    objectFit:'cover',
+                }} 
+                className='videoTag' controls>
+                <source src={testVideo} type='video/mp4' />
+            </video>
+        </>
       )
   }
 
-  const returnGrid = () => {
+  const returnGrid = (arrayOfVideos) => {
     return (
       <>
-        {placeHolderData.map((item, index) => (
+        {arrayOfVideos.map((item, index) => (
           <Grid my={.25} container spacing={.5}>
-                <Grid onClick={() => console.log('click')} item xs={4}>
-                    {thumbNail()}
+                <Grid item xs={4}>
+                   {thumbNail()}
                 </Grid>
-                <Grid onClick={() => console.log('click')} item xs={4}>
-                    {thumbNail()}
+                <Grid item xs={4}>
+                   {thumbNail()}
                 </Grid>
-                <Grid onClick={() => console.log('click')} item xs={4}>
+                <Grid item xs={4}>
                     {thumbNail()}
                 </Grid>
            </Grid>
@@ -52,7 +66,7 @@ export function Main() {
 
   return (
     <>
-        {returnGrid()}
+        {returnGrid(placeHolderData)}
     </>
   );
 }
