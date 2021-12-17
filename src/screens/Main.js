@@ -1,6 +1,15 @@
 import * as React from 'react';
 import { useState } from 'react';
 import testBackground from '../cat.jpeg';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import {
+  auth,
+  references,
+  createChallenge,
+  createShot,
+} from '../services/firebase';
+
+import { useNavigate } from 'react-router';
 
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
@@ -23,49 +32,49 @@ const placeHolderData = [
 ]
 
 export function Main() {
+  const [challenges] = useCollection(references.challenges);
   const [email, setEmail] = useState('');
+  const navigate = useNavigate();
 
-  const thumbNail = () => {
+  const goToChallengePage = (challengeId) => navigate(`/challenge/${challengeId}`);
+
+  const thumbNail = (challenge) => {
+    const data = challenge.data();
     return (
       <>
-        <Button onClick={() => console.log('click')} style={{ position: 'absolute', color: 'white', marginLeft: '5px', fontSize: '12px', zIndex: '100' }}>Video Title</Button>
-        <Button onClick={() => console.log('click')} style={{ position: 'absolute', color: 'white', marginLeft: '5px', transform: 'translate(0%, 90%)', fontSize: '12px', zIndex: '100' }}>Username</Button>
-        <video
+        <Button onClick={() => goToChallengePage(challenge.id)} style={{ position: 'absolute', color: 'white', marginLeft: '5px', fontSize: '12px', zIndex: '100' }}>{data.title}</Button>
+        <Button onClick={() => goToChallengePage(challenge.id)} style={{ position: 'absolute', color: 'white', marginLeft: '5px', transform: 'translate(0%, 90%)', fontSize: '12px', zIndex: '100' }}>{data.challenger.displayName}</Button>
+        {/* <video
           style={{
             width: '100%',
             height: '150px',
             objectFit: 'cover',
           }}
           className='videoTag' controls>
-          <source src={testVideo} type='video/mp4' />
-        </video>
+          <source src={challenge.data().mediaURL} type='video/mp4' />
+        </video> */}
+        <img src={data.challenger.photoURL} type='video/mp4' />
       </>
     )
   }
 
-  const returnGrid = (arrayOfVideos) => {
+  const returnGrid = (challenges) => {
     return (
       <>
-        {arrayOfVideos.map((item, index) => (
-          <Grid my={.25} container spacing={.5}>
-            <Grid item xs={4}>
-              {thumbNail()}
+        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 1, md: 2 }}>
+          {challenges.map((challenge, index) => (
+            <Grid item xs={2} sm={4} md={4} key={index}>
+              <div>{thumbNail(challenge)}</div>
             </Grid>
-            <Grid item xs={4}>
-              {thumbNail()}
-            </Grid>
-            <Grid item xs={4}>
-              {thumbNail()}
-            </Grid>
-          </Grid>
-        ))}
+          ))}
+        </Grid>
       </>
     );
   };
 
   return (
     <>
-      {returnGrid(placeHolderData)}
+      {returnGrid(challenges ? challenges.docs : [] )}
     </>
   );
 }

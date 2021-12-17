@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import Container from '@mui/material/Container';
 import { connect } from "react-redux";
 
-import { Home } from './screens/Home';
+import { Main } from './screens/Main';
 import { About } from './screens/About';
 import { DataStructure } from './screens/DataStructure';
 import { ChallengeUpload } from './screens/ChallengeUpload';
@@ -21,7 +21,7 @@ function App({ header }) {
         )}
         <Container>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Main />} />
             <Route path="about" element={<About />} />
             <Route path="data-structure" element={<DataStructure />} />
           </Routes>
