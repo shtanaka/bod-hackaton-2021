@@ -26,8 +26,6 @@ export function AppHeader() {
   const signUp = useMutation(() => createUser(email, password));
   const signOut = useMutation(() => signOutUser());
 
-  console.log(user);
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
