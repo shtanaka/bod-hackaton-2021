@@ -5,6 +5,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import CancelIcon from '@mui/icons-material/Cancel';
+import StarIcon from '@mui/icons-material/Star';
+import EmptyStarIcon from '@mui/icons-material/StarOutline';
+import HeartIcon from '@mui/icons-material/HeartBroken';
+import EmptyHeartIcon from '@mui/icons-material/HeartBrokenOutlined';
 
 import {
   useCollection,
@@ -16,6 +20,7 @@ import {
   references,
   createChallenge,
   createShot,
+  likeShot,
 } from '../services/firebase';
 
 import { useParams } from 'react-router-dom';
@@ -25,6 +30,7 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const style = {
   position: 'absolute',
@@ -41,14 +47,21 @@ const style = {
 };
 
 export function VideoPage() {
+  const [user] = useAuthState(auth);
   const navigate = useNavigate();
   const { challengeId } = useParams();
   const [challenge] = useDocument(references.challenge(challengeId));
   const [shots] = useCollection(references.shots(challengeId));
 
+  const isVideoMine = () => challenge.data().challenger.userId === user.uid;
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const likeAShot = async () => {
+    await likeShot(challengeId);
+  };
 
   const thumbNail = (shot) => {
     return (
@@ -86,6 +99,10 @@ export function VideoPage() {
           const shot = shotDoc.data();
           return thumbNail(shot);
         })}
+        <Box display="flex" justifyContent="space-between" padding={2}>
+          <StarIcon />
+          <HeartIcon onClick={() => likeAShot()} />
+        </Box>
       </>
     );
   };

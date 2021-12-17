@@ -120,3 +120,10 @@ export async function likeChallenge(challengeId) {
 
   return null;
 }
+
+export async function likeShot(shotId) {
+  const likeRef = doc(references.shotLikes(shotId), auth.currentUser.uid);
+  await setDoc(likeRef, true);
+
+  return null;
+}
