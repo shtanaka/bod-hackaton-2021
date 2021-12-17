@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
-import { getFirestore, collection } from 'firebase/firestore';
+import { getFirestore, collection, setDoc, doc } from 'firebase/firestore';
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -24,30 +24,30 @@ export const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
 
-export async function createUser(email, password) {
-  const userCredential = await createUserWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
-  console.log({ userCredential });
-  return userCredential.user;
+export const collections = {
+  users: collection(firestore, 'users'),
+  tasks: collection(firestore, 'tasks'),
+};
+
+export async function createUser(email, password, displayName) {
+  // create user account
+  await createUserWithEmailAndPassword(auth, email, password);
+
+  // create user profile
+  const userProfileRef = doc(collections.users, auth.currentUser.uid);
+  await setDoc(userProfileRef, {
+    displayName,
+    photoURL: `https://i.pravatar.cc/150?u=${auth.currentUser.uid}`,
+  });
+
+  return auth.currentUser;
 }
 
 export async function signInUser(email, password) {
-  const userCredential = await signInWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
-  console.log({ userCredential });
-  return userCredential.user;
+  await signInWithEmailAndPassword(auth, email, password);
+  return auth.currentUser;
 }
 
-export async function signOutUser(email, password) {
+export async function signOutUser() {
   await signOut(auth);
 }
-
-export const collections = {
-  tasks: collection(firestore, 'tasks'),
-};
