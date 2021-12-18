@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
+import Avatar from '@mui/material/Avatar';
 import AddIcon from '@mui/icons-material/Add';
 import { Link } from 'react-router-dom';
 import testBackground from '../cat.jpeg';
@@ -16,8 +17,10 @@ import {
 import { useNavigate } from 'react-router';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 export function Main() {
+  const [user] = useAuthState(auth);
   const [challenges] = useCollection(references.challenges);
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
@@ -28,7 +31,8 @@ export function Main() {
   const thumbNail = (challenge) => {
     const data = challenge.data();
     return (
-      <>
+      <div style={{ position: 'relative' }}>
+        <Avatar style={{ position: 'absolute', top: '8px', right: '8px' }} alt={data.challenger.displayName} src={data.challenger.photoURL} />
         <Button
           onClick={() => goToChallengePage(challenge.id)}
           style={{
@@ -65,7 +69,7 @@ export function Main() {
         >
           <source src={challenge.data().mediaURL} type="video/mp4" />
         </video>
-      </>
+      </div>
     );
   };
 
@@ -90,13 +94,16 @@ export function Main() {
   return (
     <>
       {returnGrid(challenges ? challenges.docs : [])}
-      <Box position="fixed" bottom="1em" right="1em">
-        <Link to="/challenge-upload">
-          <Fab color="primary" aria-label="add">
-            <AddIcon />
-          </Fab>
-        </Link>
-      </Box>
+      {user && (
+        <Box position="fixed" bottom="1em" right="1em">
+          <Link to="/challenge-upload">
+
+            <Fab color="primary" aria-label="add">
+              <AddIcon />
+            </Fab>
+          </Link>
+        </Box>
+      )}
     </>
   );
 }

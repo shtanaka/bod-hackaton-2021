@@ -101,7 +101,7 @@ export function VideoPage() {
         })}
         <Box display="flex" justifyContent="space-between" padding={2}>
           <StarIcon />
-          <HeartIcon onClick={() => likeAShot()} />
+          <div style={{ display: "flex", alignItems: "center" }}>10 &nbsp;&nbsp; <HeartIcon onClick={() => likeAShot()} /></div>
         </Box>
       </>
     );
@@ -151,13 +151,15 @@ export function VideoPage() {
           </Modal>
         </div>
       )}
-      <Box position="fixed" top="1em" right="1em">
-        <Link to={`/shot-upload/${challengeId}`}>
-          <Fab color="primary" aria-label="add">
-            <AddIcon />
-          </Fab>
-        </Link>
-      </Box>
+      {user && (
+        <Box position="fixed" top="1em" right="1em">
+          <Link to={`/shot-upload/${challengeId}`}>
+            <Fab color="primary" aria-label="add">
+              <AddIcon />
+            </Fab>
+          </Link>
+        </Box>
+      )}
       <Box position="fixed" top="1em" left="1em">
         <Fab onClick={() => navigate(-1)} color="secondary" aria-label="add">
           <CancelIcon />
