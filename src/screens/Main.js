@@ -32,7 +32,11 @@ export function Main() {
     const data = challenge.data();
     return (
       <div style={{ position: 'relative' }}>
-        <Avatar style={{ position: 'absolute', top: '8px', right: '8px' }} alt={data.challenger.displayName} src={data.challenger.photoURL} />
+        <Avatar
+          style={{ position: 'absolute', top: '8px', right: '8px' }}
+          alt={data.challenger.displayName}
+          src={data.challenger.photoURL}
+        />
         <Button
           onClick={() => goToChallengePage(challenge.id)}
           style={{
@@ -62,7 +66,7 @@ export function Main() {
           onClick={() => goToChallengePage(challenge.id)}
           style={{
             width: '100%',
-            height: '150px',
+            height: '200px',
             objectFit: 'cover',
           }}
           className="videoTag"
@@ -75,7 +79,7 @@ export function Main() {
 
   const returnGrid = (challenges) => {
     return (
-      <>
+      <Box pt={2}>
         <Grid
           container
           spacing={{ xs: 2, md: 3 }}
@@ -87,7 +91,7 @@ export function Main() {
             </Grid>
           ))}
         </Grid>
-      </>
+      </Box>
     );
   };
 
@@ -97,7 +101,6 @@ export function Main() {
       {user && (
         <Box position="fixed" bottom="1em" right="1em">
           <Link to="/challenge-upload">
-
             <Fab color="primary" aria-label="add">
               <AddIcon />
             </Fab>

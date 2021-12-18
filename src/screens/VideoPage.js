@@ -81,7 +81,7 @@ export function VideoPage() {
         <video
           style={{
             width: '100%',
-            height: '150px',
+            height: '200px',
             objectFit: 'cover',
           }}
           src={shot.mediaURL}
@@ -101,7 +101,9 @@ export function VideoPage() {
         })}
         <Box display="flex" justifyContent="space-between" padding={2}>
           <StarIcon />
-          <div style={{ display: "flex", alignItems: "center" }}>10 &nbsp;&nbsp; <HeartIcon onClick={() => likeAShot()} /></div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            10 &nbsp;&nbsp; <HeartIcon onClick={() => likeAShot()} />
+          </div>
         </Box>
       </>
     );
